@@ -3,7 +3,7 @@ import Note from "../model/NoteModel.js";
 //Function ngambil semua data dari db
 export const getNotes = async (req, res) => {
   try {
-    const response = await User.findAll();
+    const response = await Note.findAll();
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);

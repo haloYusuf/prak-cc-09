@@ -4,11 +4,12 @@ import db from "../config/Database.js";
 const Note = db.define(
   "content",
   {
-    user: {
+    title: {
       type: Sequelize.STRING,
       allowNull: true,
     },
     content: Sequelize.STRING,
+    is_finish: Sequelize.INTEGER,
   },
   {
     freezeTableName: true,
