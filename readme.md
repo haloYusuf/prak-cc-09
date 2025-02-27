@@ -12,6 +12,6 @@ Pada project ini, ada beberapa tahapan yang harus dilakukan terlebih dahulu:
 
 ## Untuk frontend
 
-- Buka Folder `frontend` di buka commandline.
+- Buka Folder `frontend` di commandline.
 - Jalankan perintah `npm install`.
 - Jalankan perintah `npm run dev`.
