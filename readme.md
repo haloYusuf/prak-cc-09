@@ -6,9 +6,10 @@ Pada project ini, ada beberapa tahapan yang harus dilakukan terlebih dahulu:
 
 ## Untuk backend
 
-- Buka Folder `backend` di code editor, masuk pada bagian `config/Database.js`.
-- Pada parameter Sequelize, password dan host dari database masih kosong, anda bisa menghubungi saya via wa. Jika tidak, password dan host sudah tersedia di laporan (hanya Asisten Lab yang bisa melihat).
-- Setelah mengisi password dan host, buka commandline, masuk kedalam folder `backend`, jalankan perintah `nodemon start`.
+- Buka Folder `backend` di code editor.
+- Buat Database di mysql dengan nama note.
+- Pada parameter Sequelize, username, password dan host dari database sesuai dengan XAMPP anda.
+- Setelah mengisi username, password dan host, buka commandline, masuk kedalam folder `backend`, jalankan perintah `nodemon start`.
 
 ## Untuk frontend
 

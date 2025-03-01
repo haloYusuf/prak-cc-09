@@ -6,22 +6,22 @@ POST http://localhost:5000/tambah-note
 Content-Type: application/json
 
 {
-    "title": "Tugas ADBO 1",
-    "content": "Tugas 1 ADBO dadakan bgt tb\" aja ada",
+    "title": "Tugas 3 Prak TCC",
+    "content": "Tugas 3 Prak TCC (Disuruh GCP bjirrr)",
     "is_finish": 0
 }
 
 ###
 
-PUT http://localhost:5000/update-note/1
+PUT http://localhost:5000/update-note/4
 Content-Type:  application/json
 
 {
-    "title": "Tugas1 Prak TCC",
-    "content": "Tugas 1 Prak TCC (Disuruh buat web app note bjirrr)",
-    "is_finish": 0
+    "title": "Tugas 3 Prak TCC",
+    "content": "Tugas 3 Prak TCC",
+    "is_finish": 1
 }
 
 ###
 
-DELETE  http://localhost:5000/delete-note/1
+DELETE  http://localhost:5000/delete-note/4

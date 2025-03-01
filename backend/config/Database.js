@@ -1,8 +1,9 @@
 import {Sequelize} from "sequelize";
 
-const db = new Sequelize('notes-yusuf', 'root', '', {
-    host: '',
-    dialect: 'mysql'
+const db = new Sequelize('note', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    timezone: '+07:00'
 })
 
 export default db;
