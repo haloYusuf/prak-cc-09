@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://backend-yusuf-6-363721261053.us-central1.run.app";
 
 export const getNotes = async () => {
   const response = await fetch(`${API_URL}/notes`);
