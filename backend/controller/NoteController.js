@@ -3,10 +3,29 @@ import Note from "../model/NoteModel.js";
 //Function ngambil semua data dari db
 export const getNotes = async (req, res) => {
   try {
-    const response = await Note.findAll();
+    const uId = req.user.id; // Mengambil uId dari cookie
+
+    if (!uId) {
+      return res.status(400).json({
+        message: "uId tidak ditemukan dalam cookie",
+      });
+    }
+    const response = await Note.findAll({
+      where: { uId }, // Filter berdasarkan uId
+    });
+    if (response.length === 0) {
+      return res.status(404).json({
+        message: "Tidak ada catatan ditemukan untuk uId ini",
+      });
+    }
+
     res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
+    res.status(500).json({
+      message: "Terjadi kesalahan saat mengambil catatan",
+      error: error.message,
+    });
   }
 };
 

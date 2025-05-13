@@ -1,12 +1,14 @@
-import React from "react";
-import NotesPage from "./pages/NotesPage";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthProvider } from "./auth/AuthProvider";
+import Router from "./routes/RouterApp"; // halaman-halaman
+import AxiosInterceptor from "./api/axiosInterceptor";
+
 
 const App = () => {
   return (
-    <div>
-      <NotesPage />
-    </div>
+    <AuthProvider>
+      <AxiosInterceptor />
+      <Router />
+    </AuthProvider>
   );
 };
 

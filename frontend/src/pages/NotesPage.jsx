@@ -1,41 +1,57 @@
+// NotesPage.jsx
 import React, { useState, useEffect } from "react";
 import NotesTable from "../components/NotesTable";
 import AddNote from "../components/AddNote";
+import { Container, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import {
-  getNotes,
+  fetchNotes,
   addNote,
-  updateNoteStatus,
+  updateStatusNote,
   deleteNote,
 } from "../services/note-api";
-import { Container, Button } from "react-bootstrap";
+import useAuth from "../auth/useAuth";
 
 const NotesPage = () => {
+  const { logout } = useAuth();
   const [notes, setNotes] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); // Hook untuk navigasi programatik
 
   useEffect(() => {
     loadNotes();
   }, []);
 
   const loadNotes = async () => {
-    const data = await getNotes();
+    const data = await fetchNotes();
     setNotes(data);
   };
 
   const handleAddNote = async (title, content) => {
-    await addNote(title, content);
-    loadNotes();
+    const newNote = await addNote(title, content);
+    console.log(newNote);
+    await loadNotes();
     setShowModal(false);
   };
 
   const handleUpdateStatus = async (id, isFinish) => {
-    await updateNoteStatus(id, isFinish);
-    loadNotes();
+    const updatedNote = await updateStatusNote(id, isFinish);
+    if (updatedNote) {
+      await loadNotes(); // Refresh notes setelah status diperbarui
+    }
   };
 
   const handleDeleteNote = async (id) => {
-    await deleteNote(id);
-    loadNotes();
+    const deletedNote = await deleteNote(id);
+    if (deletedNote) {
+      // setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+      await loadNotes();
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout(); // Panggil fungsi logout dari auth-api.js
+    navigate("/login"); // Redirect ke halaman login setelah logout
   };
 
   return (
@@ -44,6 +60,14 @@ const NotesPage = () => {
         <h1 className="text-primary fw-bold mb-4">
           <span className="fs-1">Note Pengingat Tugas</span>
         </h1>
+        {/* Tombol Logout */}
+        <Button
+          variant="danger"
+          className="mb-3"
+          onClick={handleLogout} // Fungsi logout
+        >
+          Logout
+        </Button>
         <Button
           variant="success"
           className="mb-3"
@@ -51,8 +75,6 @@ const NotesPage = () => {
         >
           Buat Data Baru
         </Button>
-
-        {}
         <div className="d-flex justify-content-center w-100">
           <NotesTable
             notes={notes}
