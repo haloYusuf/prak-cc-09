@@ -13,3 +13,4 @@ Untuk melihat tugas-tugas yang sudah / sedang kita kerjakan, bisa melalui branch
  - [Tugas Notes App](https://github.com/haloYusuf/prak-cc-09/tree/tugas-notes) [Individu]
  - [Tugas Docker](https://github.com/haloYusuf/prak-cc-09/tree/tugas-docker) [Individu]
  - [Tugas CI - CD](https://github.com/haloYusuf/prak-cc-09/tree/tugas-ci-cd) [Individu]
+ - [Tugas Auth](https://github.com/haloYusuf/prak-cc-09/tree/tugas-auth) [Individu]
