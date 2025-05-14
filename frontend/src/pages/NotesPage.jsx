@@ -50,8 +50,12 @@ const NotesPage = () => {
   };
 
   const handleLogout = async () => {
-    await logout(); // Panggil fungsi logout dari auth-api.js
-    navigate("/login"); // Redirect ke halaman login setelah logout
+    try {
+      await logout(); // Tunggu sampai proses logout selesai
+      navigate("/login"); // Redirect setelah logout selesai
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
   };
 
   return (

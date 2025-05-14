@@ -1,13 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Import untuk routing
-import LoginPage from "../pages/LoginPage"; // Halaman login
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import NotesPage from "../pages/NotesPage";
 import ProtectedRoute from "../pages/ProtectedRoute";
 
 // Fungsi untuk memeriksa status login
 const isAuthenticated = () => {
-  const token = localStorage.getItem("accessToken"); // Ganti sesuai dengan cara kamu menyimpan token
-  return token !== null; // Mengembalikan true jika token ada (artinya user sudah login)
+  const token = localStorage.getItem("accessToken"); // Periksa localStorage untuk accessToken
+  return token !== null;
 };
 
 function RouterApp() {
@@ -17,7 +17,7 @@ function RouterApp() {
         {/* Jika sudah login, redirect ke /notes */}
         <Route
           path="/"
-          element={isAuthenticated() ? <Navigate to="/notes" /> : <LoginPage />}
+          element={isAuthenticated() ? <NotesPage /> : <LoginPage />}
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

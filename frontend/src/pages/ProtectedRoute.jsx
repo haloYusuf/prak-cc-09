@@ -1,12 +1,14 @@
-// src/auth/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
-import useAuth from "../auth/useAuth";
 import PropTypes from "prop-types";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  // Memeriksa apakah ada token yang tersimpan di localStorage
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("accessToken");
+    return token !== null;
+  };
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 
