@@ -29,6 +29,11 @@ export const AuthProvider = ({ children }) => {
       console.log(token, id);
       setAccessToken(token);
 
+      Cookies.set("uId", res.data.uId, {
+        secure: true,
+        sameSite: "Strict",
+      });
+
       // Cookies.set("uId", res.data.uId, {
       //   secure: true,
       //   sameSite: "Strict",
