@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { BASE_URL } from "../utils/utils";
 
 export const fetchNotes = async () => {
-  const uId = Cookies.get("uId"); // Ambil uId dari cookie
+  const uId = localStorage.getItem("uId"); // Ambil uId dari cookie
   if (!uId) {
     console.error("uId tidak ditemukan dalam cookie");
     return [];
@@ -22,7 +22,7 @@ export const fetchNotes = async () => {
 };
 
 export const addNote = async (title, content) => {
-  const uId = Cookies.get("uId"); // Ambil uId dari cookie
+  const uId = localStorage.getItem("uId"); // Ambil uId dari cookie
   if (!uId) {
     console.error("uId tidak ditemukan dalam cookie");
     return;

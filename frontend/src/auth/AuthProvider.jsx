@@ -12,6 +12,11 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("accessToken") || null;
   });
 
+  const [uId, setUId] = useState(() => {
+    // Cek jika ada accessToken di localStorage saat aplikasi dimuat
+    return localStorage.getItem("uId") || null;
+  });
+
   useEffect(() => {
     // Simpan accessToken ke localStorage setiap kali state berubah
     if (accessToken) {
@@ -21,6 +26,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [accessToken]);
 
+  useEffect(() => {
+    // Simpan accessToken ke localStorage setiap kali state berubah
+    if (uId) {
+      localStorage.setItem("uId", uId);
+    } else {
+      localStorage.removeItem("uId");
+    }
+  }, [uId]);
+
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${BASE_URL}/login`, { email, password });
@@ -28,11 +42,7 @@ export const AuthProvider = ({ children }) => {
       const id = res.data.uId;
       console.log(token, id);
       setAccessToken(token);
-
-      Cookies.set("uId", res.data.uId, {
-        secure: true,
-        sameSite: "Strict",
-      });
+      setUId(id);
 
       // Cookies.set("uId", res.data.uId, {
       //   secure: true,
@@ -56,6 +66,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
     Cookies.remove("refreshToken");
     Cookies.remove("uId");
+    localStorage.removeItem("uId");
     localStorage.removeItem("accessToken");
 
     return Promise.resolve();
