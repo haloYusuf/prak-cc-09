@@ -34,14 +34,14 @@ export const login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
-      domain: '.frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
+      domain: 'frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
     });
     res.cookie("uId", user.id, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
-      domain: '.frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
+      domain: 'frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
     });
 
     return res.status(200).json({
@@ -136,12 +136,12 @@ export const logout = async (req, res) => {
     res.clearCookie("refreshToken", {
       sameSite: "None",
       secure: true,
-      domain: '.frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
+      domain: 'frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
     });
     res.clearCookie("uId", {
       sameSite: "None",
       secure: true,
-      domain: '.frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
+      domain: 'frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com',
     });
     return res.status(200).json({
       message: "Berhasil melakukan logout!",
