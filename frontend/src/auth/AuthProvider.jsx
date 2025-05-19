@@ -27,6 +27,11 @@ export const AuthProvider = ({ children }) => {
       const token = res.data.accessToken;
       setAccessToken(token);
 
+      Cookies.set("uId", res.data.uId, {
+        secure: true,
+        sameSite: "Strict",
+      });
+
       Cookies.set("refreshToken", res.data.refreshToken, {
         secure: false,
         sameSite: "Strict",
