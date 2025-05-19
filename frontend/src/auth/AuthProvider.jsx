@@ -24,20 +24,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${BASE_URL}/login`, { email, password });
-      console.log(res);
       const token = res.data.accessToken;
+      const id = res.data.uId;
+      console.log(token, id);
       setAccessToken(token);
 
-      Cookies.set("uId", res.data.uId, {
-        secure: true,
-        sameSite: "Strict",
-      });
+      // Cookies.set("uId", res.data.uId, {
+      //   secure: true,
+      //   sameSite: "Strict",
+      // });
 
-      Cookies.set("refreshToken", res.data.refreshToken, {
-        secure: false,
-        sameSite: "Strict",
-        expires: 5,
-      });
+      // Cookies.set("refreshToken", res.data.refreshToken, {
+      //   secure: false,
+      //   sameSite: "Strict",
+      //   expires: 5,
+      // });
 
       return true;
     } catch (err) {
