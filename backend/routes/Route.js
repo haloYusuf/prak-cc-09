@@ -18,7 +18,7 @@ const router = express.Router();
 // User Routes
 router.post("/register", createUser);
 router.post("/login", login);
-router.get("/token", refreshToken);
+router.post("/token", refreshToken);
 router.delete("/logout", logout);
 
 router.get("/notes", verifyToken, getNotes);

@@ -17,6 +17,11 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("uId") || null;
   });
 
+  const [refreshToken, setRefreshToken] = useState(() => {
+    // Cek jika ada accessToken di localStorage saat aplikasi dimuat
+    return localStorage.getItem("refreshToken") || null;
+  });
+
   useEffect(() => {
     // Simpan accessToken ke localStorage setiap kali state berubah
     if (accessToken) {
@@ -35,14 +40,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, [uId]);
 
+  useEffect(() => {
+    // Simpan accessToken ke localStorage setiap kali state berubah
+    if (refreshToken) {
+      localStorage.setItem("refreshToken", refreshToken);
+    } else {
+      localStorage.removeItem("refreshToken");
+    }
+  }, [refreshToken]);
+
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${BASE_URL}/login`, { email, password });
       const token = res.data.accessToken;
       const id = res.data.uId;
+      const refresh = res.data.refreshToken;
       console.log(token, id);
       setAccessToken(token);
       setUId(id);
+      setRefreshToken(refresh);
 
       // Cookies.set("uId", res.data.uId, {
       //   secure: true,
@@ -68,16 +84,18 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove("uId");
     localStorage.removeItem("uId");
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
 
     return Promise.resolve();
   };
 
   const refreshAccessToken = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/token`);
-      const token = res.data.accessToken;
-      setAccessToken(token);
-      return token;
+      const token = localStorage.getItem("refreshToken");
+      const res = await axios.post(`${BASE_URL}/token`, { token });
+      const newAccessToken = res.data.accessToken;
+      setAccessToken(newAccessToken);
+      return newAccessToken;
     } catch (err) {
       console.error("Token refresh failed:", err);
       logout();

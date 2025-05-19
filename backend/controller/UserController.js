@@ -42,12 +42,12 @@ export const login = async (req, res) => {
       secure: true, // ❗️ WAJIB kalau pakai https
     });
 
-    
     console.log(user.id);
 
     return res.status(200).json({
       accessToken,
       uId: user.id,
+      refreshToken: generateToken,
       message: "Login berhasil!",
     });
   } catch (error) {
@@ -90,7 +90,7 @@ export const createUser = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const { token: refreshToken } = req.body;
     if (!refreshToken) return res.sendStatus(401);
 
     const user = await User.findOne({
