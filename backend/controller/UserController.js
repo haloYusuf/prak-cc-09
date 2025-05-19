@@ -42,7 +42,7 @@ export const login = async (req, res) => {
       secure: true, // ❗️ WAJIB kalau pakai https
     });
 
-    console.log(user.id);
+    console.log(generateToken);
 
     return res.status(200).json({
       accessToken,
