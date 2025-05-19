@@ -21,4 +21,4 @@ app.use(express.json()); // Middleware untuk parsing JSON
 app.use(cookieParser()); // Middleware untuk parsing cookies
 app.use(Route); // Rute API kamu
 
-app.listen(5000, () => console.log("Server Up and Running..."));
+app.listen(8080, () => console.log("Server Up and Running..."));
