@@ -32,11 +32,14 @@ export const login = async (req, res) => {
     res.cookie("refreshToken", generateToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-
+      sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
+      secure: true, // ❗️ WAJIB kalau pakai https
     });
     res.cookie("uId", user.id, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
+      secure: true, // ❗️ WAJIB kalau pakai https
     });
 
     return res.status(200).json({
@@ -128,8 +131,14 @@ export const logout = async (req, res) => {
     if (!data) return res.status(204).json("User Tidak Ditemukan");
     await User.update({ refresh_token: null }, { where: { id: data.id } });
 
-    res.clearCookie("refreshToken");
-    res.clearCookie("uId");
+    res.clearCookie("refreshToken", {
+      sameSite: "None",
+      secure: true,
+    });
+    res.clearCookie("uId", {
+      sameSite: "None",
+      secure: true,
+    });
     return res.status(200).json({
       message: "Berhasil melakukan logout!",
     });

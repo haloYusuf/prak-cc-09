@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 
       Cookies.set("refreshToken", res.data.refreshToken, {
         secure: false,
-        sameSite: "None",
+        sameSite: "Strict",
         expires: 5,
       });
 
