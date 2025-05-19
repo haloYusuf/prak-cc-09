@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
+const port = process.env.PORT || 5000;
+
 // CORS Options Configuration
 const corsOptions = {
   origin: "https://frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com/", // URL frontend kamu (menggunakan Vite, biasanya localhost:5173)
@@ -20,4 +22,4 @@ app.use(express.json()); // Middleware untuk parsing JSON
 app.use(cookieParser()); // Middleware untuk parsing cookies
 app.use(Route); // Rute API kamu
 
-app.listen(5000, () => console.log("Server Up and Running..."));
+app.listen(port, () => console.log("Server Up and Running..."));
