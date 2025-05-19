@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 // CORS Options Configuration
 const corsOptions = {
-  origin: "https://frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com/", // URL frontend kamu (menggunakan Vite, biasanya localhost:5173)
+  origin: "https://frontend-yusuf-6-dot-a-09-450915.uc.r.appspot.com", // URL frontend kamu (menggunakan Vite, biasanya localhost:5173)
   methods: ["GET", "POST", "PUT", "DELETE"], // Tentukan metode HTTP yang diizinkan
   allowedHeaders: ["Content-Type", "Authorization"], // Tentukan header yang diizinkan
   credentials: true, // Izinkan pengiriman kredensial (cookies)
