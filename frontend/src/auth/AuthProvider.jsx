@@ -91,8 +91,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAccessToken = async () => {
     try {
-      const token = localStorage.getItem("refreshToken");
-      const res = await axios.post(`${BASE_URL}/token`, { token });
+      const res = await axios.get(`${BASE_URL}/token`);
       const newAccessToken = res.data.accessToken;
       setAccessToken(newAccessToken);
       return newAccessToken;

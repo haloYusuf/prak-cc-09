@@ -90,7 +90,7 @@ export const createUser = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const { token: refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.sendStatus(401);
 
     const user = await User.findOne({

@@ -5,6 +5,7 @@ import { BASE_URL } from "../utils/utils";
 export const fetchNotes = async () => {
   // const uId = localStorage.getItem("uId"); // Ambil uId dari cookie
   const uId = Cookies.get("uId");
+  console.log(uId);
   if (!uId) {
     console.error("uId tidak ditemukan dalam cookie");
     return [];
@@ -25,6 +26,7 @@ export const fetchNotes = async () => {
 export const addNote = async (title, content) => {
   // const uId = localStorage.getItem("uId"); // Ambil uId dari cookie
   const uId = Cookies.get("uId");
+  console.log(uId);
   if (!uId) {
     console.error("uId tidak ditemukan dalam cookie");
     return;
