@@ -65,11 +65,11 @@ export const AuthProvider = ({ children }) => {
       //   sameSite: "Strict",
       // });
 
-      // Cookies.set("refreshToken", res.data.refreshToken, {
-      //   secure: false,
-      //   sameSite: "Strict",
-      //   expires: 5,
-      // });
+      Cookies.set("refreshToken", res.data.refreshToken, {
+        secure: false,
+        sameSite: "Strict",
+        expires: 5,
+      });
 
       return true;
     } catch (err) {
