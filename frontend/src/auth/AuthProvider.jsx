@@ -51,7 +51,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(`${BASE_URL}/login`, { email, password });
+      const res = await axios.post(`${BASE_URL}/login`, { email, password }, {
+  withCredentials: true,
+});
       const token = res.data.accessToken;
       // const id = res.data.uId;
       // const refresh = res.data.refreshToken;
