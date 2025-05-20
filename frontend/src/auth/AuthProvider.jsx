@@ -85,7 +85,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const res = await axios.delete(`${BASE_URL}/logout`, {
+      withCredentials: true,
+    });
     setAccessToken(null);
     Cookies.remove("refreshToken");
     Cookies.remove("uId");
@@ -99,9 +102,8 @@ export const AuthProvider = ({ children }) => {
   const refreshAccessToken = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/token`);
-      const newAccessToken = res.data.accessToken;
-      setAccessToken(newAccessToken);
-      return newAccessToken;
+      setAccessToken(res.data.accessToken);
+      return res.data.accessToken;
     } catch (err) {
       console.error("Token refresh failed:", err);
       logout();
