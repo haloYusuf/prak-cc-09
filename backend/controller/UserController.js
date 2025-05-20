@@ -32,13 +32,13 @@ export const login = async (req, res) => {
     res.cookie("refreshToken", generateToken, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
+      sameSite: "none", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
     });
     res.cookie("uId", user.id, {
       httpOnly: false,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "None", // ❗️ WAJIB kalau frontend/backend beda domain
+      sameSite: "none", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
     });
 
@@ -46,8 +46,8 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       accessToken,
-      uId: user.id,
-      refreshToken: generateToken,
+      // uId: user.id,
+      // refreshToken: generateToken,
       message: "Login berhasil!",
     });
   } catch (error) {
@@ -136,11 +136,11 @@ export const logout = async (req, res) => {
     await User.update({ refresh_token: null }, { where: { id: data.id } });
 
     res.clearCookie("refreshToken", {
-      sameSite: "None",
+      sameSite: "none",
       secure: true,
     });
     res.clearCookie("uId", {
-      sameSite: "None",
+      sameSite: "none",
       secure: true,
     });
     return res.status(200).json({

@@ -12,15 +12,15 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("accessToken") || null;
   });
 
-  const [uId, setUId] = useState(() => {
-    // Cek jika ada accessToken di localStorage saat aplikasi dimuat
-    return localStorage.getItem("uId") || null;
-  });
+  // const [uId, setUId] = useState(() => {
+  //   // Cek jika ada accessToken di localStorage saat aplikasi dimuat
+  //   return localStorage.getItem("uId") || null;
+  // });
 
-  const [refreshToken, setRefreshToken] = useState(() => {
-    // Cek jika ada accessToken di localStorage saat aplikasi dimuat
-    return localStorage.getItem("refreshToken") || null;
-  });
+  // const [refreshToken, setRefreshToken] = useState(() => {
+  //   // Cek jika ada accessToken di localStorage saat aplikasi dimuat
+  //   return localStorage.getItem("refreshToken") || null;
+  // });
 
   useEffect(() => {
     // Simpan accessToken ke localStorage setiap kali state berubah
@@ -31,34 +31,34 @@ export const AuthProvider = ({ children }) => {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    // Simpan accessToken ke localStorage setiap kali state berubah
-    if (uId) {
-      localStorage.setItem("uId", uId);
-    } else {
-      localStorage.removeItem("uId");
-    }
-  }, [uId]);
+  // useEffect(() => {
+  //   // Simpan accessToken ke localStorage setiap kali state berubah
+  //   if (uId) {
+  //     localStorage.setItem("uId", uId);
+  //   } else {
+  //     localStorage.removeItem("uId");
+  //   }
+  // }, [uId]);
 
-  useEffect(() => {
-    // Simpan accessToken ke localStorage setiap kali state berubah
-    if (refreshToken) {
-      localStorage.setItem("refreshToken", refreshToken);
-    } else {
-      localStorage.removeItem("refreshToken");
-    }
-  }, [refreshToken]);
+  // useEffect(() => {
+  //   // Simpan accessToken ke localStorage setiap kali state berubah
+  //   if (refreshToken) {
+  //     localStorage.setItem("refreshToken", refreshToken);
+  //   } else {
+  //     localStorage.removeItem("refreshToken");
+  //   }
+  // }, [refreshToken]);
 
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${BASE_URL}/login`, { email, password });
       const token = res.data.accessToken;
-      const id = res.data.uId;
-      const refresh = res.data.refreshToken;
-      console.log(token, id);
+      // const id = res.data.uId;
+      // const refresh = res.data.refreshToken;
+      // console.log(token, id);
       setAccessToken(token);
-      setUId(id);
-      setRefreshToken(refresh);
+      // setUId(id);
+      // setRefreshToken(refresh);
 
       // Cookies.set("uId", res.data.uId, {
       //   secure: true,
@@ -82,9 +82,9 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
     Cookies.remove("refreshToken");
     Cookies.remove("uId");
-    localStorage.removeItem("uId");
+    // localStorage.removeItem("uId");
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("refreshToken");
 
     return Promise.resolve();
   };
