@@ -46,7 +46,7 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       accessToken,
-      // uId: user.id,
+      uId: user.id,
       // refreshToken: generateToken,
       message: "Login berhasil!",
     });

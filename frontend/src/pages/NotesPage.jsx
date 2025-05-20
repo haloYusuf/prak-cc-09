@@ -52,7 +52,7 @@ const NotesPage = () => {
   const handleLogout = async () => {
     try {
       await logout(); // Tunggu sampai proses logout selesai
-      navigate("/"); // Redirect setelah logout selesai
+      navigate("/login"); // Redirect setelah logout selesai
     } catch (error) {
       console.error("Gagal logout:", error);
     }

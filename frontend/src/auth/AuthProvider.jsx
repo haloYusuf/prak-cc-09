@@ -51,10 +51,15 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(`${BASE_URL}/login`, { email, password }, {
-  withCredentials: true,
-});
+      const res = await axios.post(
+        `${BASE_URL}/login`,
+        { email, password },
+        {
+          withCredentials: true,
+        }
+      );
       const token = res.data.accessToken;
+      const uid = res.data.uId;
       // const id = res.data.uId;
       // const refresh = res.data.refreshToken;
       // console.log(token, id);
@@ -62,10 +67,10 @@ export const AuthProvider = ({ children }) => {
       // setUId(id);
       // setRefreshToken(refresh);
 
-      // Cookies.set("uId", res.data.uId, {
-      //   secure: true,
-      //   sameSite: "Strict",
-      // });
+      Cookies.set("uId", uid, {
+        secure: true,
+        sameSite: "none",
+      });
 
       Cookies.set("refreshToken", res.data.refreshToken, {
         secure: false,
