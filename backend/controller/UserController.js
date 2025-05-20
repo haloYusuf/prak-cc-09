@@ -30,13 +30,13 @@ export const login = async (req, res) => {
       { where: { id: user.id } }
     );
     res.cookie("refreshToken", generateToken, {
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: "none", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
     });
     res.cookie("uId", user.id, {
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: "none", // ❗️ WAJIB kalau frontend/backend beda domain
       secure: true, // ❗️ WAJIB kalau pakai https
