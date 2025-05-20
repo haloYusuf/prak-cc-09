@@ -94,7 +94,7 @@ export const refreshToken = async (req, res) => {
     if (!refreshToken) return res.sendStatus(401);
 
     const user = await User.findOne({
-      where: { refresh_token: refreshToken },
+      where: { refreshToken: refreshToken },
     });
     if (!user)
       return res.status(403).json({ message: "Gagal mendapatkan user!" });
@@ -130,10 +130,10 @@ export const logout = async (req, res) => {
     if (!refreshToken) return res.sendStatus(204);
 
     const data = await User.findOne({
-      where: { refresh_token: refreshToken },
+      where: { refreshToken: refreshToken },
     });
     if (!data) return res.status(204).json("User Tidak Ditemukan");
-    await User.update({ refresh_token: null }, { where: { id: data.id } });
+    await User.update({ refreshToken: null }, { where: { id: data.id } });
 
     res.clearCookie("refreshToken", {
       sameSite: "none",
