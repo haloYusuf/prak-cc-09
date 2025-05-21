@@ -1,6 +1,6 @@
 # Prak. Cloud Computing IF - A Kelompok 09
 
-Di Github ini, berisi semua tugas Praktikum Cloud Computing IF - A baik yang individu maupun berkelompok (Bisa dilihat pada list branchnya individu atau kelompok).
+Di Repo Github ini, berisi semua tugas Praktikum Cloud Computing IF - A baik yang individu maupun berkelompok (Bisa dilihat pada list branchnya individu atau kelompok).
 
 Untuk melihat tugas-tugas yang sudah / sedang kita kerjakan, bisa melalui branch yang tersedia.
 
