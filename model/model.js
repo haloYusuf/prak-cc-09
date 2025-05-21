@@ -7,8 +7,8 @@ import GroupMember from "./GroupMemberModel.js";
 Group.belongsTo(User, { foreignKey: "uid" });
 User.hasMany(Group, { foreignKey: "uid" });
 
-Group.belongsTo(Compe, { foreignKey: "CompeId" });
-Compe.hasMany(Group, { foreignKey: "CompeId" });
+Group.belongsTo(Compe, { foreignKey: "compeId" });
+Compe.hasMany(Group, { foreignKey: "compeId" });
 
 GroupMember.belongsTo(Group, { foreignKey: "groupId" });
 Group.hasMany(GroupMember, { foreignKey: "groupId" });

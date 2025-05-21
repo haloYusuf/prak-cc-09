@@ -36,6 +36,7 @@ const User = db.define(
         is: /^[0-9+]+$/i, // opsional: validasi hanya angka dan "+"
       },
     },
+    refreshToken: Sequelize.TEXT,
   },
   { freezeTableName: true }
 );

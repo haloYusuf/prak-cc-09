@@ -4,7 +4,7 @@ import db from "../config/Database.js";
 const Compe = db.define(
   "compe",
   {
-    CompeId: {
+    compeId: {
       type: DataTypes.STRING,
       primaryKey: true,
     },
