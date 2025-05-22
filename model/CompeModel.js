@@ -29,7 +29,7 @@ const Compe = db.define(
       allowNull: false,
       defaultValue: 0,
       validate: {
-        isIn: [[0, 1, 2]], // 0 => Open, 1 => Closed / Started, 2 => Finished
+        isIn: [[0, 1]], // 0 => Open, 1 => Closed / Started / Finished
       },
     },
     maxParticipant: {

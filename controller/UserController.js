@@ -12,7 +12,7 @@ const loginHelper = async (user, res) => {
       role: user.role,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "30s" }
+    { expiresIn: "1h" }
   );
 
   const refreshToken = jwt.sign(
@@ -240,7 +240,7 @@ export const logout = async (req, res) => {
       where: { refreshToken: refreshToken },
     });
     if (!data) return res.status(204).json("User Tidak Ditemukan");
-    await User.update({ refreshToken: null }, { where: { id: data.uid } });
+    await User.update({ refreshToken: null }, { where: { uid: data.uid } });
 
     res.clearCookie("refreshToken", {
       sameSite: "none",

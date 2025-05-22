@@ -28,6 +28,19 @@ const Group = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    groupStatus: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0, // 0 => Pending
+      validate: {
+        isIn: [[-1, 0, 1]], // -1 => Rejected, 0 => Pending, 1 => Accepted
+      },
+    },
+    rejectedMessage: {
+      type: DataTypes.TEXT, // Menggunakan TEXT untuk pesan yang mungkin panjang
+      allowNull: true, // Pesan hanya ada jika ditolak, jadi bisa NULL
+      defaultValue: null,
+    },
   },
   { freezeTableName: true }
 );
