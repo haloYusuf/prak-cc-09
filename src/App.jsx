@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import Sidebar from './components/layout/Sidebar';
+import CompetitionsPage from './pages/CompetitionsPage';
+import GroupManagementPage from './pages/GroupManagementPage';
+import GroupDetailsPage from './pages/GroupDetailsPage';
+import NewCompetitionPage from './pages/NewCompetitionPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import SettingsPage from './pages/SettingsPage';
+import HelpSupportPage from './pages/HelpSupportPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeTab, setActiveTab] = useState('competitions');
+  const [selectedGroup, setSelectedGroup] = useState(null);
+
+  const handleGroupSelect = (group) => {
+    setSelectedGroup(group);
+    setActiveTab('group-details');
+  };
+
+  const handleBackToGroups = () => {
+    setSelectedGroup(null);
+    setActiveTab('groups');
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'competitions':
+        return <CompetitionsPage />;
+      case 'groups':
+        return <GroupManagementPage onGroupSelect={handleGroupSelect} />;
+      case 'group-details':
+        return <GroupDetailsPage onNavigateBack={handleBackToGroups} />;
+      case 'new-competition':
+        return <NewCompetitionPage />;
+      case 'analytics':
+        return <AnalyticsPage />;
+      case 'settings':
+        return <SettingsPage />;
+      case 'help':
+        return <HelpSupportPage />;
+      default:
+        return <CompetitionsPage />;
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div className="flex-1 overflow-hidden">
+        <main className="h-full overflow-y-auto">
+          {renderContent()}
+        </main>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
