@@ -21,9 +21,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     { id: 'competitions', label: 'Competitions', icon: Trophy },
     { id: 'groups', label: 'Group Management', icon: Users },
     { id: 'new-competition', label: 'New Competition', icon: Plus },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'help', label: 'Help & Support', icon: HelpCircle },
+    // { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    // { id: 'settings', label: 'Settings', icon: Settings },
+    // { id: 'help', label: 'Help & Support', icon: HelpCircle },
   ];
 
   // Close dropdown when clicking outside

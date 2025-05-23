@@ -4,9 +4,6 @@ import CompetitionsPage from './pages/CompetitionsPage';
 import GroupManagementPage from './pages/GroupManagementPage';
 import GroupDetailsPage from './pages/GroupDetailsPage';
 import NewCompetitionPage from './pages/NewCompetitionPage';
-import AnalyticsPage from './pages/AnalyticsPage';
-import SettingsPage from './pages/SettingsPage';
-import HelpSupportPage from './pages/HelpSupportPage';
 
 function App() {
   const [activeTab, setActiveTab] = useState('competitions');
@@ -32,12 +29,12 @@ function App() {
         return <GroupDetailsPage onNavigateBack={handleBackToGroups} />;
       case 'new-competition':
         return <NewCompetitionPage />;
-      case 'analytics':
-        return <AnalyticsPage />;
-      case 'settings':
-        return <SettingsPage />;
-      case 'help':
-        return <HelpSupportPage />;
+      // case 'analytics':
+      //   return <AnalyticsPage />;
+      // case 'settings':
+      //   return <SettingsPage />;
+      // case 'help':
+      //   return <HelpSupportPage />;
       default:
         return <CompetitionsPage />;
     }
