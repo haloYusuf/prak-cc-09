@@ -1,55 +1,23 @@
+// App.jsx atau parent component
 import React, { useState } from 'react';
-import Sidebar from './components/layout/Sidebar';
-import CompetitionsPage from './pages/CompetitionsPage';
-import GroupManagementPage from './pages/GroupManagementPage';
-import GroupDetailsPage from './pages/GroupDetailsPage';
-import NewCompetitionPage from './pages/NewCompetitionPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
-function App() {
-  const [activeTab, setActiveTab] = useState('competitions');
-  const [selectedGroup, setSelectedGroup] = useState(null);
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('login');
 
-  const handleGroupSelect = (group) => {
-    setSelectedGroup(group);
-    setActiveTab('group-details');
-  };
-
-  const handleBackToGroups = () => {
-    setSelectedGroup(null);
-    setActiveTab('groups');
-  };
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'competitions':
-        return <CompetitionsPage />;
-      case 'groups':
-        return <GroupManagementPage onGroupSelect={handleGroupSelect} />;
-      case 'group-details':
-        return <GroupDetailsPage onNavigateBack={handleBackToGroups} />;
-      case 'new-competition':
-        return <NewCompetitionPage />;
-      // case 'analytics':
-      //   return <AnalyticsPage />;
-      // case 'settings':
-      //   return <SettingsPage />;
-      // case 'help':
-      //   return <HelpSupportPage />;
-      default:
-        return <CompetitionsPage />;
-    }
-  };
+  const switchToLogin = () => setCurrentPage('login');
+  const switchToRegister = () => setCurrentPage('register');
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex-1 overflow-hidden">
-        <main className="h-full overflow-y-auto">
-          {renderContent()}
-        </main>
-      </div>
-    </div>
+    <>
+      {currentPage === 'login' ? (
+        <LoginPage onSwitchToRegister={switchToRegister} />
+      ) : (
+        <RegisterPage onSwitchToLogin={switchToLogin} />
+      )}
+    </>
   );
-}
+};
 
 export default App;
