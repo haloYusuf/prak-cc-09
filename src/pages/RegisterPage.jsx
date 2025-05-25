@@ -1,28 +1,40 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/utils.js";
 
 const RegisterPage = () => {
-  const [registerData, setRegisterData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone: "",
-  });
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    navigate("/login");
-    console.log("Register attempt:", registerData);
-  };
+    if (password !== confirmPassword) {
+      alert("Password dan konfirmasi password tidak cocok");
+      return;
+    }
+    console.log(userName);
 
-  const handleRegisterChange = (field, value) => {
-    setRegisterData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/register/admin`, {
+        userName,
+        email,
+        password,
+        confirmPassword,
+        phoneNumber,
+      });
+      console.log(response);
+      if (response) {
+        navigate("/");
+      }
+    } catch (e) {
+      console.log("Gagal mendaftar. Silakan coba lagi!", e); // Menampilkan error jika registrasi gagal
+    }
   };
 
   return (
@@ -75,8 +87,7 @@ const RegisterPage = () => {
             <input
               type="text"
               placeholder="Username"
-              value={registerData.username}
-              onChange={(e) => handleRegisterChange("username", e.target.value)}
+              onChange={(e) => setUserName(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-gray-400"
             />
           </div>
@@ -86,8 +97,7 @@ const RegisterPage = () => {
             <input
               type="email"
               placeholder="Email"
-              value={registerData.email}
-              onChange={(e) => handleRegisterChange("email", e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-gray-400"
             />
           </div>
@@ -97,8 +107,7 @@ const RegisterPage = () => {
             <input
               type="password"
               placeholder="Password"
-              value={registerData.password}
-              onChange={(e) => handleRegisterChange("password", e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-gray-400"
             />
           </div>
@@ -108,10 +117,7 @@ const RegisterPage = () => {
             <input
               type="password"
               placeholder="Confirm Password"
-              value={registerData.confirmPassword}
-              onChange={(e) =>
-                handleRegisterChange("confirmPassword", e.target.value)
-              }
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-gray-400"
             />
           </div>
@@ -121,8 +127,7 @@ const RegisterPage = () => {
             <input
               type="tel"
               placeholder="No Telp"
-              value={registerData.phone}
-              onChange={(e) => handleRegisterChange("phone", e.target.value)}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-full px-4 py-3 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder-gray-400"
             />
           </div>

@@ -1,133 +1,132 @@
-import React from 'react';
-import { ArrowLeft, Mail, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { ArrowLeft, Mail, Trash2 } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchAllMember } from "../services/group-api";
 
-const GroupDetailsPage = ({ onNavigateBack }) => {
-  const groupData = {
-    name: "Data Alchemists",
-    status: "APPROVED",
-    created: "Sep 15, 2023",
-    competition: "AI Hackathon",
-    submissionStatus: "Submitted",
-    leader: {
-      name: "Emily Chen",
-      email: "emily@example.com",
-      phone: "+1 (555) 123-4567",
-      initials: "EC"
-    },
-    members: [
-      {
-        id: 1,
-        name: "Emily Chen",
-        email: "emily@example.com",
-        role: "Team Leader, Data Scientist",
-        initials: "EC",
-        bgColor: "bg-blue-500"
-      },
-      {
-        id: 2,
-        name: "Ryan Kim",
-        email: "ryan@example.com",
-        role: "ML Engineer",
-        initials: "RK",
-        bgColor: "bg-green-500"
-      },
-      {
-        id: 3,
-        name: "Jessica Patel",
-        email: "jessica@example.com",
-        role: "Frontend Developer",
-        initials: "JP",
-        bgColor: "bg-purple-500"
-      },
-      {
-        id: 4,
-        name: "Thomas Nguyen",
-        email: "thomas@example.com",
-        role: "Backend Developer",
-        initials: "TN",
-        bgColor: "bg-yellow-500"
-      },
-      {
-        id: 5,
-        name: "Lisa Wong",
-        email: "lisa@example.com",
-        role: "UX/UI Designer",
-        initials: "LW",
-        bgColor: "bg-red-500"
-      }
-    ]
+const GroupDetailsPage = () => {
+  const navigate = useNavigate();
+  const { groupId } = useParams();
+  const [member, setMember] = useState([]);
+  const [group, setGroup] = useState(null);
+
+  useEffect(() => {
+    loadAllData();
+  }, []);
+
+  const loadAllData = async () => {
+    const data = await fetchAllMember(groupId);
+    setGroup(data.group);
+    setMember(data.members);
   };
+
+  function initial(input) {
+    const kata = input.trim().split(/\s+/);
+
+    let hasil = "";
+    for (let i = 0; i < Math.min(2, kata.length); i++) {
+      hasil += kata[i][0].toUpperCase();
+    }
+
+    return hasil;
+  }
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  if (!group || member.length === 0) {
+    return <div>Loading group details...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-6">
-        <button 
-          onClick={onNavigateBack}
+        <button
+          onClick={handleBack}
           className="flex items-center text-gray-600 hover:text-gray-800 mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Groups
         </button>
-        
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Group Details</h1>
-            <p className="text-gray-600">AI Hackathon - Machine Learning</p>
           </div>
-          
-          
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Group Info */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-sm p-6">
-            {/* Group Avatar */}
             <div className="flex flex-col items-center mb-6">
               <div className="w-24 h-24 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-3xl font-bold text-blue-600">DA</span>
+                <img
+                  key={group.groupImg}
+                  src={group.groupImg}
+                  alt={group.compeName.substring(0, 1)}
+                  className="h-full w-full object-cover rounded-lg"
+                />
               </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">{groupData.name}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {group.groupName}
+              </h2>
               <span className="inline-flex px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                {groupData.status}
+                {group.groupStatus === 0
+                  ? "Pending"
+                  : group.groupStatus === 1
+                  ? "Approved"
+                  : "Rejected"}
               </span>
             </div>
 
             {/* Group Details */}
             <div className="space-y-4 mb-6">
               <div>
-                <p className="text-sm text-gray-500">Created</p>
-                <p className="text-sm font-medium text-gray-900">{groupData.created}</p>
+                <p className="text-sm text-gray-500">Max members</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {group.maxMember}
+                </p>
               </div>
-              
+
+              <div>
+                <p className="text-sm text-gray-500">Created</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {new Date(group.groupCreatedAt).toLocaleDateString()}
+                </p>
+              </div>
+
               <div>
                 <p className="text-sm text-gray-500">Competition</p>
-                <p className="text-sm font-medium text-gray-900">{groupData.competition}</p>
-              </div>
-              
-              <div>
-                <p className="text-sm text-gray-500">Submission Status</p>
-                <p className="text-sm font-medium text-gray-900">{groupData.submissionStatus}</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {group.compeName}
+                </p>
               </div>
             </div>
 
             {/* Group Leader */}
             <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Group Leader</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Group Leader
+              </h3>
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-medium">{groupData.leader.initials}</span>
+                  <span className="text-white font-medium">
+                    {initial(group.leader.userName)}
+                  </span>
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">{groupData.leader.name}</p>
-                  <p className="text-sm text-gray-600">{groupData.leader.email}</p>
-                  <p className="text-sm text-gray-600">{groupData.leader.phone}</p>
+                  <p className="font-medium text-gray-900">
+                    {group.leader.userName}
+                  </p>
+                  <p className="text-sm text-gray-600">{group.leader.email}</p>
+                  <p className="text-sm text-gray-600">
+                    {group.leader.phoneNumber}
+                  </p>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -146,8 +145,12 @@ const GroupDetailsPage = ({ onNavigateBack }) => {
             {/* Members List */}
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Team Members</h3>
-                <span className="text-sm text-gray-500">Total: {groupData.members.length} members</span>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Team Members
+                </h3>
+                <span className="text-sm text-gray-500">
+                  Total: {member.length} members
+                </span>
               </div>
 
               {/* Table Header */}
@@ -159,16 +162,29 @@ const GroupDetailsPage = ({ onNavigateBack }) => {
 
               {/* Team Members */}
               <div className="divide-y divide-gray-200">
-                {groupData.members.map((member) => (
-                  <div key={member.id} className="grid grid-cols-12 gap-4 py-4 items-center">
+                {member.map((member) => (
+                  <div
+                    key={member.id}
+                    className="grid grid-cols-12 gap-4 py-4 items-center"
+                  >
                     <div className="col-span-4 flex items-center space-x-3">
-                      <div className={`w-8 h-8 ${member.bgColor} rounded-full flex items-center justify-center`}>
-                        <span className="text-white text-sm font-medium">{member.initials}</span>
+                      <div
+                        className={`w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center`}
+                      >
+                        <span className="text-white text-sm font-medium">
+                          {initial(member.userName)}
+                        </span>
                       </div>
-                      <span className="font-medium text-gray-900">{member.name}</span>
+                      <span className="font-medium text-gray-900">
+                        {member.userName}
+                      </span>
                     </div>
-                    <div className="col-span-4 text-gray-600">{member.email}</div>
-                    <div className="col-span-4 text-gray-600">{member.role}</div>
+                    <div className="col-span-4 text-gray-600">
+                      {member.email}
+                    </div>
+                    <div className="col-span-4 text-gray-600">
+                      {member.uid === group.leader.uid ? "Leader" : "Member"}
+                    </div>
                   </div>
                 ))}
               </div>

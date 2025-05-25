@@ -11,11 +11,13 @@ import {
 import SidebarItem from "./SidebarItem";
 // Import useNavigate, bukan Navigate (kecuali Anda memang butuh komponennya di tempat lain)
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../auth/useAuth";
 
 const Sidebar = ({ activeTab }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate(); // <-- Panggil hook di sini
+  const { logout, user } = useAuth();
 
   const menuItems = [
     { id: "competitions", label: "Competitions", icon: Trophy },
@@ -24,16 +26,21 @@ const Sidebar = ({ activeTab }) => {
   ];
 
   // ... (useEffect dan handleLogout tetap sama) ...
-  const handleLogout = () => {
-    // Pertimbangkan menggunakan navigate('/') atau navigate('/login')
-    // setelah logic logout jika sudah ada halaman login.
-    // window.location.href lebih seperti 'hard refresh/redirect'.
-    window.location.href = "about:blank";
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login", { replace: true });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
+
+  const displayName = user?.userName || "Guest User";
+  const displayEmail = user?.email || " ";
 
   return (
     <div className="w-64 bg-blue-600 text-white flex flex-col h-full">
@@ -82,8 +89,8 @@ const Sidebar = ({ activeTab }) => {
             <span className="text-sm font-medium">JD</span>{" "}
           </div>{" "}
           <div className="flex-1 min-w-0 text-left">
-            <p className="text-sm font-medium truncate">John Doe</p>
-            <p className="text-xs text-blue-200 truncate">Admin</p> {" "}
+            <p className="text-sm font-medium truncate">{displayName}</p>
+            <p className="text-xs text-blue-200 truncate">{displayEmail}</p>{" "}
           </div>{" "}
           {showProfileDropdown ? (
             <ChevronUp className="w-4 h-4 text-blue-200" />

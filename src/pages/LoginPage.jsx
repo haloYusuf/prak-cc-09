@@ -1,18 +1,31 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../auth/useAuth";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate("/competitions");
-    console.log("Login attempt:", { username, password, rememberMe });
+    try {
+      const res = await login(username, password);
+      console.log("Login attempt:", { username, password });
+      console.log(res);
+      if (res) {
+        navigate("/competitions");
+      }else {
+        setError("Email atau password salah!", e);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -96,18 +109,17 @@ const LoginPage = () => {
               )}
             </button>
           </div>
-
-          {/* Sign In Button */}
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={handleLogin}
             className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Sign In
           </button>
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
 
-        {/* Register Link */}
         <div className="text-center mt-6">
           <span className="text-gray-600 text-sm">Don't have an account? </span>
           <button
