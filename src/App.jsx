@@ -1,4 +1,4 @@
-import { AuthProvider } from "./auth/AuthProvider";
+import { AuthProvider } from "./auth/authProvider";
 import Router from "./routes/RouterApp"; // halaman-halaman
 import AxiosInterceptor from "./api/axiosInterceptor";
 
