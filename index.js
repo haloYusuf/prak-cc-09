@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 
 // CORS Options Configuration
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://frontend-compe-admin-dot-a-09-450915.uc.r.appspot.com",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,

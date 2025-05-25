@@ -29,17 +29,17 @@ const loginHelper = async (user, res) => {
   await User.update({ refreshToken }, { where: { uid: user.uid } });
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
+    httpOnly: false,
     maxAge: 24 * 60 * 60 * 1000,
-    // sameSite: "none",
-    // secure: true,
+    sameSite: "none",
+    secure: true,
   });
 
   res.cookie("uid", user.uid, {
-    httpOnly: true,
+    httpOnly: false,
     maxAge: 24 * 60 * 60 * 1000,
-    // sameSite: "none",
-    // secure: true,
+    sameSite: "none",
+    secure: true,
   });
 
   return res.status(200).json({
