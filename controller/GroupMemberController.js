@@ -28,12 +28,12 @@ export const createNewMember = async (req, res) => {
       return res.status(404).json({ message: "Grup tidak ditemukan." });
     }
 
-    if (group.uid !== leaderUid) {
-      return res.status(403).json({
-        message:
-          "Forbidden: Hanya leader grup yang dapat menambahkan anggota baru.",
-      });
-    }
+    // if (group.uid !== leaderUid) {
+    //   return res.status(403).json({
+    //     message:
+    //       "Forbidden: Hanya leader grup yang dapat menambahkan anggota baru.",
+    //   });
+    // }
 
     if (group.groupStatus !== 1) {
       let statusMessage = "Pending";
