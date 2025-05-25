@@ -13,8 +13,8 @@ const port = process.env.PORT || 5000;
 
 // CORS Options Configuration
 const corsOptions = {
-  origin: ["localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };

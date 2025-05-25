@@ -39,7 +39,7 @@ compeRouter.put(
 compeRouter.patch("/status/:compeId", updateStatusCompe);
 
 compeRouter.get("/group/:compeId", verifyToken, isAdmin, getAllGroupByCompe);
-compeRouter.put("/group/approve/:grouId", verifyToken, isAdmin, approveGroup);
-compeRouter.put("/group/reject/:grouId", verifyToken, isAdmin, rejectGroup);
+compeRouter.put("/group/approve/", verifyToken, isAdmin, approveGroup);
+compeRouter.put("/group/reject/", verifyToken, isAdmin, rejectGroup);
 
 export default compeRouter;

@@ -1,13 +1,26 @@
 import Group from "../model/GroupModel.js";
 import Compe from "../model/CompeModel.js";
 import GroupMember from "../model/GroupMemberModel.js";
+import User from "../model/UserModel.js";
 import crypto from "crypto";
 import path from "path";
 import fs from "fs";
 import { uploadToGCS, deleteFromGCS } from "../utils/UploadHelper.js";
 
 function cleanFilename(id, ext) {
-  return `${id.replace(/[^\w\-]/g, "_").toLowerCase()}${ext}`;
+  const now = new Date();
+
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = String(now.getFullYear()).substring(2);
+
+  const cleanedId = id.replace(/[^\w\-]/g, "_").toLowerCase();
+
+  return `${cleanedId}-${seconds}${minutes}${hours}-${day}${month}${year}${ext}`;
 }
 
 export function generateGroupId() {
@@ -175,8 +188,8 @@ export const editGroup = async (req, res) => {
 
     // Update field yang diizinkan
     if (groupName) group.groupName = groupName;
-    if (maxMember) group.maxMember = parseInt(maxMember, 10); // Pastikan maxMember adalah integer
-    group.groupImg = newGroupImgUrl; // Update URL gambar
+    if (maxMember) group.maxMember = parseInt(maxMember, 10);
+    group.groupImg = newGroupImgUrl;
 
     await group.save();
 
@@ -186,7 +199,7 @@ export const editGroup = async (req, res) => {
     });
   } catch (error) {
     console.error("Error saat mengedit grup:", error);
-    // Hapus file lokal jika ada error dan file terupload
+    
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
@@ -199,7 +212,7 @@ export const editGroup = async (req, res) => {
 export const deleteGroup = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const userId = req.user.id; // Diambil dari middleware verifyToken
+    const userId = req.user.id;
 
     const group = await Group.findByPk(groupId);
 
@@ -214,9 +227,8 @@ export const deleteGroup = async (req, res) => {
         .json({ message: "Forbidden: Anda bukan leader grup ini." });
     }
 
-    // Periksa status grup: hanya bisa dihapus jika -1 (Rejected) atau 0 (Pending)
     if (group.groupStatus !== -1 && group.groupStatus !== 0) {
-      let statusMessage = "Disetujui"; // Default untuk status yang tidak diizinkan (selain -1 atau 0)
+      let statusMessage = "Disetujui";
       if (group.groupStatus === 1) statusMessage = "Disetujui";
       else statusMessage = `dengan status tidak dikenal (${group.groupStatus})`;
 
@@ -263,9 +275,12 @@ export const getAllGroupMembers = async (req, res) => {
     const group = await Group.findByPk(groupId, {
       include: [
         {
+          model: Compe,
+          attributes: ["compeName"],
+        },
+        {
           model: User,
-          as: "Leader",
-          attributes: ["uid", "userName", "email"],
+          attributes: ["uid", "userName", "email", "phoneNumber"],
         },
       ],
     });
@@ -284,18 +299,20 @@ export const getAllGroupMembers = async (req, res) => {
     });
     let memberList = [];
     if (members && members.length > 0) {
-      memberList = members.map((member) => member.User);
+      memberList = members.map((member) => member.user);
     }
 
     res.status(200).json({
       message: `Anggota untuk grup ${group.groupName} (ID: ${groupId})`,
-      groupDetails: {
+      group: {
         groupId: group.groupId,
         groupName: group.groupName,
         groupImg: group.groupImg,
+        compeName: group.compe.compeName,
+        leader: group.user,
         maxMember: group.maxMember,
         groupStatus: group.groupStatus,
-        leader: group.Leader,
+        groupCreatedAt: group.createdAt,
       },
       members: memberList,
       totalMembersInTable: members.length,

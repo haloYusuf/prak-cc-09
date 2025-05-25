@@ -12,7 +12,7 @@ const loginHelper = async (user, res) => {
       role: user.role,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "10m" }
   );
 
   const refreshToken = jwt.sign(
@@ -23,23 +23,23 @@ const loginHelper = async (user, res) => {
       role: user.role,
     },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "7d" }
   );
 
   await User.update({ refreshToken }, { where: { uid: user.uid } });
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: false,
+    httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: "none",
-    secure: true,
+    // sameSite: "none",
+    // secure: true,
   });
 
   res.cookie("uid", user.uid, {
-    httpOnly: false,
+    httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: "none",
-    secure: true,
+    // sameSite: "none",
+    // secure: true,
   });
 
   return res.status(200).json({

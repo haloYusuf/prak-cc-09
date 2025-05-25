@@ -1,11 +1,24 @@
 import Compe from "../model/CompeModel.js";
 import Group from "../model/GroupModel.js";
+import User from "../model/UserModel.js";
 import { uploadToGCS, deleteFromGCS } from "../utils/UploadHelper.js";
 import path from "path";
 import fs from "fs";
 
 function cleanFilename(id, ext) {
-  return `${id.replace(/[^\w\-]/g, "_").toLowerCase()}${ext}`;
+  const now = new Date();
+
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = String(now.getFullYear()).substring(2);
+
+  const cleanedId = id.replace(/[^\w\-]/g, "_").toLowerCase();
+
+  return `${cleanedId}-${seconds}${minutes}${hours}-${day}${month}${year}${ext}`;
 }
 
 function generateCompeId() {
@@ -138,6 +151,7 @@ export const editCompe = async (req, res) => {
     compe.compeName = compeName || compe.compeName;
     compe.compeDesc = compeDesc || compe.compeDesc;
     compe.compeDate = compeDate || compe.compeDate;
+    compe.compeImg = newImgUrl || compe.compeImg;
     compe.maxParticipant = maxParticipant || compe.maxParticipant;
 
     await compe.save();
@@ -163,10 +177,12 @@ export const updateStatusCompe = async (req, res) => {
 
     if (compe.compeStatus === 0) {
       compe.compeStatus = 1;
+    } else if (compe.compeStatus === 1) {
+      compe.compeStatus = 0;
     } else {
       return res
         .status(400)
-        .json({ message: "Competition has already Started" });
+        .json({ message: "Status not Detected" });
     }
 
     await compe.save();
@@ -222,23 +238,36 @@ export const getAllGroupByCompe = async (req, res) => {
 
     const groups = await Group.findAll({
       where: { compeId },
+      include: [
+        {
+          model: User,
+          attributes: ["userName", "email"],
+        },
+      ],
     });
+
+    if (groups.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No groups found for this competition." });
+    }
 
     res.status(200).json({
       message: `Groups for competition ${compeId}`,
       data: groups,
     });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch groups by competition", error: error });
+    console.error("Error fetching groups by competition:", error);
+    res.status(500).json({
+      message: "Failed to fetch groups by competition",
+      error: error.message,
+    });
   }
 };
 
 export const approveGroup = async (req, res) => {
   try {
-    const { groupId } = req.params; // Mengambil groupId dari parameter URL
+    const { groupId } = req.body;
 
     const group = await Group.findByPk(groupId);
 
@@ -288,8 +317,7 @@ export const approveGroup = async (req, res) => {
 
 export const rejectGroup = async (req, res) => {
   try {
-    const { groupId } = req.params; // Mengambil groupId dari parameter URL
-    const { rejectedMessage } = req.body; // Mengambil alasan penolakan dari body request
+    const { groupId, rejectedMessage } = req.body;
 
     if (!rejectedMessage || rejectedMessage.trim() === "") {
       return res
