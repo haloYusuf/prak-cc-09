@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAccessToken = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/auth/token`);
+      const res = await axios.post(`${BASE_URL}/auth/token`);
       setAccessToken(res.data.accessToken);
       loadUserFromToken(res.data.accessToken);
       return res.data.accessToken;
