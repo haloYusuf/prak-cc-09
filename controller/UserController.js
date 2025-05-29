@@ -198,7 +198,14 @@ export const registerAsAdmin = async (req, res) => {
 export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.sendStatus(401);
+    if (!refreshToken && req.body && req.body.refreshToken) {
+      refreshToken = req.body.refreshToken;
+    }
+
+    if (!refreshToken)
+      return res
+        .sendStatus(401)
+        .json({ message: "Refresh token tidak ditemukan (cookie/body)." });
 
     const user = await User.findOne({
       where: { refreshToken: refreshToken },
