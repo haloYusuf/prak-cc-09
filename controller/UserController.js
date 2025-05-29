@@ -241,6 +241,9 @@ export const refreshToken = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken && req.body && req.body.refreshToken) {
+      refreshToken = req.body.refreshToken;
+    }
     if (!refreshToken) return res.sendStatus(204);
 
     const data = await User.findOne({
