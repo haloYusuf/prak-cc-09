@@ -15,7 +15,7 @@ userRouter.post("/login/admin", loginAsAdmin);
 userRouter.post("/login/user", loginAsUser);
 userRouter.post("/register/admin", registerAsAdmin);
 userRouter.post("/register/user", registerAsUser);
-userRouter.get("/token", refreshToken);
+userRouter.post("/token", refreshToken);
 userRouter.delete("/logout", logout);
 
 export default userRouter;
