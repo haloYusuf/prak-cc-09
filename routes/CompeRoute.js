@@ -30,7 +30,7 @@ compeRouter.post(
   createCompe
 );
 
-compeRouter.get("/:compeId", verifyToken, isAdmin, getCompeById);
+compeRouter.get("/:compeId", verifyToken, getCompeById);
 compeRouter.delete("/:compeId", verifyToken, isAdmin, deleteCompe);
 compeRouter.put(
   "/:compeId",
