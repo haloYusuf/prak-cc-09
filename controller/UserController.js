@@ -44,6 +44,7 @@ const loginHelper = async (user, res) => {
 
   return res.status(200).json({
     accessToken,
+    refreshToken,
     uid: user.uid,
     message: "Login berhasil!",
   });
