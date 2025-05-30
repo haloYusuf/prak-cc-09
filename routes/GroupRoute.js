@@ -5,6 +5,7 @@ import {
   editGroup,
   deleteGroup,
   getAllGroupMembers,
+  getJoinedGroupsByUserId
 } from "../controller/GroupController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { isRegularUser } from "../middleware/authorizeRole.js";
@@ -16,6 +17,7 @@ groupRouter.post("/", verifyToken, isRegularUser, upload.single("image"), create
 groupRouter.put("/:groupId", verifyToken, isRegularUser, upload.single("image"), editGroup);
 groupRouter.delete("/:groupId", verifyToken, isRegularUser, deleteGroup);
 
+groupRouter.get("/all/:groupId", verifyToken, isRegularUser, getJoinedGroupsByUserId);
 groupRouter.get("/members/:groupId", verifyToken, getAllGroupMembers);
 
 export default groupRouter;

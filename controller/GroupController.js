@@ -199,7 +199,7 @@ export const editGroup = async (req, res) => {
     });
   } catch (error) {
     console.error("Error saat mengedit grup:", error);
-    
+
     if (req.file && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
@@ -322,5 +322,56 @@ export const getAllGroupMembers = async (req, res) => {
     res
       .status(500)
       .json({ message: "Gagal mengambil anggota grup.", error: error.message });
+  }
+};
+
+export const getJoinedGroupsByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userGroups = await GroupMember.findAll({
+      where: { uid: userId },
+      include: [
+        {
+          model: Group,
+          as: "group",
+          required: true,
+          include: [
+            {
+              model: Compe,
+              as: "compe",
+              required: true,
+            },
+            {
+              model: User,
+              as: "leader",
+              attributes: ["uid", "userName", "email"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (userGroups && userGroups.length > 0) {
+      const result = userGroups.map((gm) => ({
+        groupDetails: gm.group,
+      }));
+
+      res.status(200).json({
+        message: `Successfully fetched groups joined by user ${userId}`,
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        message: `User ${userId} has not joined any groups or groups not found.`,
+        data: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching user's joined groups:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };

@@ -1,6 +1,7 @@
 import Compe from "../model/CompeModel.js";
 import Group from "../model/GroupModel.js";
 import User from "../model/UserModel.js";
+import { Op } from "sequelize";
 import { uploadToGCS, deleteFromGCS } from "../utils/UploadHelper.js";
 import path from "path";
 import fs from "fs";
@@ -180,9 +181,7 @@ export const updateStatusCompe = async (req, res) => {
     } else if (compe.compeStatus === 1) {
       compe.compeStatus = 0;
     } else {
-      return res
-        .status(400)
-        .json({ message: "Status not Detected" });
+      return res.status(400).json({ message: "Status not Detected" });
     }
 
     await compe.save();
@@ -368,5 +367,74 @@ export const rejectGroup = async (req, res) => {
     res
       .status(500)
       .json({ message: "Gagal menolak grup.", error: error.message });
+  }
+};
+
+export const getLatestOpenCompetitions = async (req, res) => {
+  try {
+    const now = new Date();
+
+    const competitions = await Compe.findAll({
+      where: {
+        compeStatus: 0,
+        compeDate: {
+          [Op.lt]: now,
+        },
+      },
+      order: [["compeDate", "DESC"]],
+      limit: 10,
+    });
+
+    if (competitions && competitions.length > 0) {
+      res.status(200).json({
+        message: "Successfully fetched latest open competitions",
+        data: competitions,
+      });
+    } else {
+      res.status(404).json({
+        message: "No open competitions found matching the criteria",
+        data: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching latest open competitions:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllOpenCompetitions = async (req, res) => {
+  try {
+    const now = new Date();
+
+    const competitions = await Compe.findAll({
+      where: {
+        compeStatus: 0,
+        compeDate: {
+          [Op.lt]: now,
+        },
+      },
+      order: [["compeDate", "DESC"]],
+    });
+
+    if (competitions && competitions.length > 0) {
+      res.status(200).json({
+        message: "Successfully fetched all open competitions",
+        data: competitions,
+      });
+    } else {
+      res.status(404).json({
+        message: "No open competitions found matching the criteria",
+        data: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching all open competitions:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };

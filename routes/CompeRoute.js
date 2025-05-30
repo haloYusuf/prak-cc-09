@@ -10,6 +10,8 @@ import {
   getAllGroupByCompe,
   approveGroup,
   rejectGroup,
+  getLatestOpenCompetitions,
+  getAllOpenCompetitions,
 } from "../controller/CompeController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { isAdmin } from "../middleware/authorizeRole.js";
@@ -18,6 +20,8 @@ const compeRouter = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 compeRouter.get("/", verifyToken, isAdmin, getAllCompe);
+compeRouter.get("/open/latest/", verifyToken, getLatestOpenCompetitions);
+compeRouter.get("/open/", verifyToken, getAllOpenCompetitions);
 compeRouter.post(
   "/",
   verifyToken,
@@ -36,7 +40,7 @@ compeRouter.put(
   editCompe
 );
 
-compeRouter.patch("/status/:compeId", updateStatusCompe);
+compeRouter.patch("/status/:compeId", verifyToken, isAdmin, updateStatusCompe);
 
 compeRouter.get("/group/:compeId", verifyToken, isAdmin, getAllGroupByCompe);
 compeRouter.put("/group/approve/", verifyToken, isAdmin, approveGroup);
