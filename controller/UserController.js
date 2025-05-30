@@ -198,7 +198,7 @@ export const registerAsAdmin = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    var refreshToken = req.cookies.refreshToken;
     if (!refreshToken && req.body && req.body.refreshToken) {
       refreshToken = req.body.refreshToken;
     }
@@ -241,7 +241,7 @@ export const refreshToken = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    var refreshToken = req.cookies.refreshToken;
     if (!refreshToken && req.body && req.body.refreshToken) {
       refreshToken = req.body.refreshToken;
     }
