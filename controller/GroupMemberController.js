@@ -4,9 +4,8 @@ import User from "../model/UserModel.js";
 import { Sequelize } from "sequelize"; // Untuk transaksi jika diperlukan dan Op
 
 export const createNewMember = async (req, res) => {
-  const uid = req.user.uid; // Diambil dari middleware verifyToken
-
   const { groupId } = req.params; // atau req.body.groupId
+  const {uid} = req.body;
 
   if (!uid) {
     return res.status(400).json({
