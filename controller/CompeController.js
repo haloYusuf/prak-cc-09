@@ -1,6 +1,7 @@
 import Compe from "../model/CompeModel.js";
 import Group from "../model/GroupModel.js";
 import User from "../model/UserModel.js";
+import GroupMember from "../models/GroupMemberModel.js";
 import { Op } from "sequelize";
 import { uploadToGCS, deleteFromGCS } from "../utils/UploadHelper.js";
 import path from "path";
@@ -429,6 +430,58 @@ export const getAllOpenCompetitions = async (req, res) => {
     res.status(500).json({
       message: "Internal server error",
       error: error.message,
+    });
+  }
+};
+
+export const checkUserInCompetition = async (req, res) => {
+  const { userId, compeId } = req.params; // Ambil userId dan compeId dari parameter URL
+
+  if (!userId || !compeId) {
+    return res.status(400).json({
+      message: "User ID and Competition ID are required.",
+      isMember: false,
+    });
+  }
+
+  try {
+    const groupWithUserAsMember = await Group.findOne({
+      where: {
+        compeId: compeId,
+      },
+      include: [
+        {
+          model: GroupMember,
+          as: "group_members",
+          where: {
+            uid: userId,
+          },
+          required: true,
+        },
+      ],
+    });
+
+    if (groupWithUserAsMember) {
+      res.status(200).json({
+        message: `User ${userId} is a member of a group (Group Name: ${groupWithUserAsMember.groupName}) in this competitions.`,
+        isMember: true,
+        groupDetails: groupWithUserAsMember,
+      });
+    } else {
+      res.status(200).json({
+        message: `User ${userId} is not a member of any group in competition ${compeId}.`,
+        isMember: false,
+      });
+    }
+  } catch (error) {
+    console.error(
+      "Error checking user membership in competition group:",
+      error
+    );
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+      isMember: false,
     });
   }
 };

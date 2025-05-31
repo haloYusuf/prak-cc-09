@@ -12,6 +12,7 @@ import {
   rejectGroup,
   getLatestOpenCompetitions,
   getAllOpenCompetitions,
+  checkUserInCompetition,
 } from "../controller/CompeController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { isAdmin } from "../middleware/authorizeRole.js";
@@ -21,6 +22,7 @@ const upload = multer({ dest: "uploads/" });
 
 compeRouter.get("/", verifyToken, isAdmin, getAllCompe);
 compeRouter.get("/open/latest/", verifyToken, getLatestOpenCompetitions);
+compeRouter.get("/:compeId/check/:userId", verifyToken, checkUserInCompetition);
 compeRouter.get("/open/", verifyToken, getAllOpenCompetitions);
 compeRouter.post(
   "/",
