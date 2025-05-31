@@ -1,7 +1,7 @@
 import Compe from "../model/CompeModel.js";
 import Group from "../model/GroupModel.js";
 import User from "../model/UserModel.js";
-import GroupMember from "../models/GroupMemberModel.js";
+import GroupMember from "../model/GroupMemberModel.js";
 import { Op } from "sequelize";
 import { uploadToGCS, deleteFromGCS } from "../utils/UploadHelper.js";
 import path from "path";
