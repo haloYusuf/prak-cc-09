@@ -378,7 +378,7 @@ export const getLatestOpenCompetitions = async (req, res) => {
       where: {
         compeStatus: 0,
       },
-      order: [["compeDate", "DESC"]],
+      order: [["updatedAt", "DESC"]],
       limit: 10,
     });
 
@@ -409,9 +409,6 @@ export const getAllOpenCompetitions = async (req, res) => {
     const competitions = await Compe.findAll({
       where: {
         compeStatus: 0,
-        compeDate: {
-          [Op.lt]: now,
-        },
       },
       order: [["compeDate", "DESC"]],
     });
