@@ -61,7 +61,7 @@ export async function createGroup(req, res) {
     const approvedGroupsCount = await Group.count({
       where: {
         compeId: compeId,
-        groupStatus: 1, // 1 => Accepted
+        groupStatus: 0,
       },
     });
 
