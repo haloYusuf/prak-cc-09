@@ -344,7 +344,7 @@ export const getJoinedGroupsByUserId = async (req, res) => {
             },
             {
               model: User,
-              as: "leader",
+              as: "user",
               attributes: ["uid", "userName", "email"],
             },
           ],

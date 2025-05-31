@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize"; // Untuk transaksi jika diperlukan dan Op
 
 export const createNewMember = async (req, res) => {
   const { groupId } = req.params; // atau req.body.groupId
-  const {uid} = req.body;
+  const { uid } = req.body;
 
   if (!uid) {
     return res.status(400).json({
@@ -81,9 +81,7 @@ export const createNewMember = async (req, res) => {
 
     if (currentMemberCount >= group.maxMember) {
       return res.status(400).json({
-        message: `Grup sudah penuh. Jumlah anggota saat ini (${
-          currentMemberCount
-        }) telah mencapai batas maksimum (${group.maxMember}).`,
+        message: `Grup sudah penuh. Jumlah anggota saat ini (${currentMemberCount}) telah mencapai batas maksimum (${group.maxMember}).`,
       });
     }
 
@@ -119,8 +117,8 @@ export const createNewMember = async (req, res) => {
 };
 
 export const removeMemberFromGroup = async (req, res) => {
-  const userUid = req.user.uid;
   const { groupId } = req.params;
+  const { uid } = req.body;
 
   try {
     const group = await Group.findByPk(groupId);
@@ -128,7 +126,7 @@ export const removeMemberFromGroup = async (req, res) => {
       return res.status(404).json({ message: "Grup tidak ditemukan." });
     }
 
-    if (group.uid === userUid) {
+    if (group.uid === uid) {
       return res.status(400).json({
         message:
           "Leader tidak dapat keluar dari grup dengan cara ini. Pertimbangkan untuk menghapus grup.",
@@ -139,7 +137,7 @@ export const removeMemberFromGroup = async (req, res) => {
     const memberEntry = await GroupMember.findOne({
       where: {
         groupId: groupId,
-        uid: userUid,
+        uid: uid,
       },
     });
 
@@ -153,7 +151,7 @@ export const removeMemberFromGroup = async (req, res) => {
     await memberEntry.destroy();
 
     res.status(200).json({
-      message: `Anda (UID: ${userUid}) berhasil keluar dari grup ${group.groupName}.`,
+      message: `Anda (UID: ${uid}) berhasil keluar dari grup ${group.groupName}.`,
     });
   } catch (error) {
     console.error("Error saat keluar dari grup:", error);
