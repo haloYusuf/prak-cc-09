@@ -4,10 +4,9 @@ import User from "../model/UserModel.js";
 import { Sequelize } from "sequelize"; // Untuk transaksi jika diperlukan dan Op
 
 export const createNewMember = async (req, res) => {
-  const leaderUid = req.user.uid; // Diambil dari middleware verifyToken
+  const uid = req.user.uid; // Diambil dari middleware verifyToken
 
   const { groupId } = req.params; // atau req.body.groupId
-  const { uid } = req.body; // UID pengguna yang akan ditambahkan
 
   if (!uid) {
     return res.status(400).json({
@@ -15,12 +14,12 @@ export const createNewMember = async (req, res) => {
     });
   }
 
-  if (leaderUid === uid) {
-    return res.status(400).json({
-      message:
-        "Anda tidak dapat menambahkan diri sendiri sebagai anggota lagi.",
-    });
-  }
+  // if (leaderUid === uid) {
+  //   return res.status(400).json({
+  //     message:
+  //       "Anda tidak dapat menambahkan diri sendiri sebagai anggota lagi.",
+  //   });
+  // }
 
   try {
     const group = await Group.findByPk(groupId);
@@ -72,7 +71,7 @@ export const createNewMember = async (req, res) => {
 
     if (otherGroupInSameCompe) {
       return res.status(400).json({
-        message: `Pengguna dengan UID ${uid} sudah terdaftar di grup lain (Nama Grup: "${otherGroupInSameCompe.Group.groupName}") dalam kompetisi ini.`,
+        message: `Anda sudah terdaftar di grup lain (Nama Grup: "${otherGroupInSameCompe.Group.groupName}") dalam kompetisi ini.`,
       });
     }
 
@@ -81,16 +80,14 @@ export const createNewMember = async (req, res) => {
       where: { groupId: groupId },
     });
 
-    // 6. Periksa apakah grup sudah penuh (jumlah anggota saat ini + leader)
-    if (currentMemberCount + 1 >= group.maxMember) {
+    if (currentMemberCount >= group.maxMember) {
       return res.status(400).json({
         message: `Grup sudah penuh. Jumlah anggota saat ini (${
-          currentMemberCount + 1
+          currentMemberCount
         }) telah mencapai batas maksimum (${group.maxMember}).`,
       });
     }
 
-    // 7. Periksa apakah pengguna sudah menjadi anggota grup tersebut
     const isAlreadyMember = await GroupMember.findOne({
       where: {
         groupId: groupId,
@@ -104,7 +101,6 @@ export const createNewMember = async (req, res) => {
       });
     }
 
-    // 8. Jika semua validasi lolos, buat entri baru di GroupMember
     const newMemberEntry = await GroupMember.create({
       uid: uid,
       groupId: groupId,
