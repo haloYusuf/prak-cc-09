@@ -129,9 +129,7 @@ export async function createGroup(req, res) {
 export const editGroup = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const { groupName, maxMember } = req.body;
-    console.log("req.user in controller:", req.user);
-    const userId = req.user.id; // Diambil dari middleware verifyToken
+    const { groupName, maxMember, uid } = req.body;
 
     const group = await Group.findByPk(groupId);
 
@@ -144,13 +142,13 @@ export const editGroup = async (req, res) => {
     }
 
     // Periksa apakah pengguna adalah leader grup
-    if (group.uid !== userId) {
+    if (group.uid !== uid) {
       if (req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
       return res
         .status(403)
-        .json({ message: `Forbidden: Anda bukan leader grup ini ${userId}` });
+        .json({ message: `Forbidden: Anda bukan leader grup ini ${uid}` });
     }
 
     // Periksa apakah status grup adalah 0 (Pending)
@@ -212,7 +210,7 @@ export const editGroup = async (req, res) => {
 export const deleteGroup = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const userId = req.user.id;
+    const { uid } = req.body;
 
     const group = await Group.findByPk(groupId);
 
@@ -221,7 +219,7 @@ export const deleteGroup = async (req, res) => {
     }
 
     // Periksa apakah pengguna adalah leader grup
-    if (group.uid !== userId) {
+    if (group.uid !== uid) {
       return res
         .status(403)
         .json({ message: "Forbidden: Anda bukan leader grup ini." });
